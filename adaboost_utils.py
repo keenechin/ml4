@@ -75,8 +75,6 @@ def weak_classifier(X,Y,D):
     ####################################################
                 left = np.arange(0,insta_idx)
                 right = np.arange(insta_idx,X.shape[0])
-                x_left = X[left,:]
-                x_right = X[right,:]
                 y_left = Y[left,:]
                 y_right = Y[right,:]
                 d_left = D[left,:]
@@ -90,9 +88,11 @@ def weak_classifier(X,Y,D):
                     h_feature = feat_idx
                     h_splitval = insta_idx
                     h_label = label
-                    ypred_best = np.vstack((y_left,y_right))
+                    ypred_left = label*np.ones(y_left.shape)
+                    ypred_right = -label*np.ones(y_right.shape)
+                    ypred_best = np.vstack((ypred_left,ypred_right))
                     alpha = 0.5*np.log((1-best_error)/best_error)
-                    print(best_error,)
+    print(best_error,)
 
                 
     #################################################### 
@@ -120,8 +120,9 @@ def update_weight(D, alpha, y, ypred):
     '''
     
     #YOUR CODE HERE:
-    for i in len(y):
+    for i in range(len(y)):
         D[i] = D[i]*np.exp(-alpha*y[i]*ypred[i])
+        print(y[i],ypred[i],D[i],alpha)
     D = D/np.sum(D)
     
     return D

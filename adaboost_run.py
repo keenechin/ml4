@@ -73,7 +73,7 @@ def train(num_iter, X_train, y_train, X_test, y_test):
 
 def main():
     num_iter = 400
-    num_iter = 1
+    num_iter = 20
 
     X_train, y_train = read_data("train_adaboost.csv")
     X_test, y_test = read_data("test_adaboost.csv")
