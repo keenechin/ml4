@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 def read_data(file_name):
     '''
@@ -73,26 +74,31 @@ def weak_classifier(X,Y,D):
     ####################################################
     #YOUR CODE HERE
     ####################################################
-                left = np.arange(0,insta_idx)
-                right = np.arange(insta_idx,X.shape[0])
+                #left = np.arange(0,insta_idx)
+                #right = np.arange(insta_idx,X.shape[0])
+                left = X[:,feat_idx] <= X[insta_idx,feat_idx]
+                right = X[:,feat_idx] > X[insta_idx,feat_idx]
                 y_left = Y[left,:]
                 y_right = Y[right,:]
                 d_left = D[left,:]
                 d_right = D[right,:]
                 
                 left_error = (y_left != label).T @ d_left
-                right_error = (y_right != -1 * label).T @ d_right
+                right_error = (y_right != -label).T @ d_right
                 error = left_error+right_error
                 if error < best_error:
                     best_error = error
                     h_feature = feat_idx
-                    h_splitval = insta_idx
+                    h_splitval = X[insta_idx,feat_idx]
                     h_label = label
-                    ypred_left = label*np.ones(y_left.shape)
-                    ypred_right = -label*np.ones(y_right.shape)
-                    ypred_best = np.vstack((ypred_left,ypred_right))
+                    #ypred_left = label*np.ones(y_left.shape)
+                    #ypred_right = -label*np.ones(y_right.shape)
+                    #ypred_best = np.vstack((ypred_left,ypred_right))
+                    ypred_best = np.zeros(Y.shape)
+                    ypred_best[left,:]=label
+                    ypred_best[right,:]=-label
+
                     alpha = 0.5*np.log((1-best_error)/best_error)
-    print(best_error,)
 
                 
     #################################################### 
@@ -122,14 +128,20 @@ def update_weight(D, alpha, y, ypred):
     #YOUR CODE HERE:
     for i in range(len(y)):
         D[i] = D[i]*np.exp(-alpha*y[i]*ypred[i])
-        print(y[i],ypred[i],D[i],alpha)
     D = D/np.sum(D)
     
     return D
     
+def visualize_data(X,y,title=None):
+    plt.scatter(X[:,0],X[:,1],c=y.ravel(),cmap='plasma')
+    plt.xlim(-2,2)
+    plt.ylim(-2,2)
+    plt.title(title)
+    plt.show()
+
+   
     
-    
-def adaboost_pred(X, h, alpha):
+def adaboost_pred(X, h, alpha,title=None):
     '''
     This function returns the predicted labels for each weak classifier
     according to its importance (given by alpha_t for t = 1...T).
@@ -144,16 +156,23 @@ def adaboost_pred(X, h, alpha):
     '''
         
     n = len(X)
-    t = len(h)
+    T = len(h)
     ypred = np.zeros((n, 1))
     
-    for i in range(t):
+    for t in range(T):
         #YOUR CODE HERE:
-        break
+        feature,splitval,label = h[t,:]
+        left = X[:,int(feature)] <= splitval
+        right = X[:,int(feature)] > splitval
+        ypred[left] += alpha[t] * label
+        ypred[right] += alpha[t] * -label
+    
+
 
     # Normalize the output according to the labels
     ypred = (ypred >= 0) * 2 - 1  
-
+    visualize_data(X,ypred,title)
+    
     return ypred
 
 

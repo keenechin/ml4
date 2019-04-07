@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #%%
-from adaboost_utils import read_data, weak_classifier, update_weight, adaboost_pred
+from adaboost_utils import visualize_data,read_data, weak_classifier, update_weight, adaboost_pred
 import numpy as np
 
 
@@ -23,7 +23,9 @@ def eval_model(X_test, y_test, hlist, alphalist):
     #YOUR CODE HERE:
     pred = np.zeros((len(X_test),1))
     acc = 0
-
+    pred = adaboost_pred(X_test,hlist,alphalist,'Test prediction')
+    acc = 1/len(y_test)*np.sum(y_test==pred)
+    
     return pred, acc
 
 
@@ -60,27 +62,27 @@ def train(num_iter, X_train, y_train, X_test, y_test):
         hlist[ i , : ] = h 
         alphalist[i,:] = alpha
         D = update_weight(D,alpha,y_train,ypred_best)
-
+        #visualize_data(X_train,ypred_best)
+        print('stage {}'.format(i+1))
 
 
     #################################################### 
     #--------------------------------------------------#
     ####################################################
-    
+    _ = adaboost_pred(X_train,hlist,alphalist,'Training predicition') 
     return hlist, alphalist
     
 
-
 def main():
     num_iter = 400
-    num_iter = 20
 
     X_train, y_train = read_data("train_adaboost.csv")
     X_test, y_test = read_data("test_adaboost.csv")
 
     hlist, alphalist = train(num_iter, X_train, y_train, X_test, y_test)
     final_pred, final_acc = eval_model(X_test, y_test, hlist, alphalist)
-
+    print('Accuracy = {}%'.format(100*final_acc))
+    print('Done')
 
 if __name__ == "__main__":
     main()
