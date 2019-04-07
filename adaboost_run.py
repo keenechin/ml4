@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #%%
-from adaboost_utils import visualize_data,read_data, weak_classifier, update_weight, adaboost_pred
+from adaboost_utils import read_data, weak_classifier, update_weight, adaboost_pred
 import numpy as np
 
 

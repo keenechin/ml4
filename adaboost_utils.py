@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def read_data(file_name):
     '''
@@ -131,14 +131,14 @@ def update_weight(D, alpha, y, ypred):
     D = D/np.sum(D)
     
     return D
-    
+"""    
 def visualize_data(X,y,title=None):
     plt.scatter(X[:,0],X[:,1],c=y.ravel(),cmap='plasma')
     plt.xlim(-2,2)
     plt.ylim(-2,2)
     plt.title(title)
     plt.show()
-
+"""
    
     
 def adaboost_pred(X, h, alpha,title=None):
@@ -171,7 +171,7 @@ def adaboost_pred(X, h, alpha,title=None):
 
     # Normalize the output according to the labels
     ypred = (ypred >= 0) * 2 - 1  
-    visualize_data(X,ypred,title)
+    #visualize_data(X,ypred,title)
     
     return ypred
 
