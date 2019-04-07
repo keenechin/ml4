@@ -63,7 +63,7 @@ def train(num_iter, X_train, y_train, X_test, y_test):
         alphalist[i,:] = alpha
         D = update_weight(D,alpha,y_train,ypred_best)
         #visualize_data(X_train,ypred_best)
-        print('stage {}'.format(i+1))
+        #print('stage {}'.format(i+1))
 
 
     #################################################### 
@@ -81,8 +81,8 @@ def main():
 
     hlist, alphalist = train(num_iter, X_train, y_train, X_test, y_test)
     final_pred, final_acc = eval_model(X_test, y_test, hlist, alphalist)
-    print('Accuracy = {}%'.format(100*final_acc))
-    print('Done')
+    #print('Accuracy = {}%'.format(100*final_acc))
+    #print('Done')
 
 if __name__ == "__main__":
     main()
