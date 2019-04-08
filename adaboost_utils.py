@@ -66,7 +66,7 @@ def weak_classifier(X,Y,D):
     h_splitval = 0
     h_label = 0
 
-    best_error = 10
+    eps_best = 10
     for feat_idx in range(X.shape[1]):
         for insta_idx in range(X.shape[0]):
             for label in np.array([-1, 1]):
@@ -86,8 +86,8 @@ def weak_classifier(X,Y,D):
                 left_error = (y_left != label).T @ d_left
                 right_error = (y_right != -label).T @ d_right
                 error = left_error+right_error
-                if error < best_error:
-                    best_error = error
+                if error < eps_best:
+                    eps_best = error
                     h_feature = feat_idx
                     h_splitval = X[insta_idx,feat_idx]
                     h_label = label
@@ -98,7 +98,7 @@ def weak_classifier(X,Y,D):
                     ypred_best[left,:]=label
                     ypred_best[right,:]=-label
 
-                    alpha = 0.5*np.log((1-best_error)/best_error)
+                    alpha = 0.5*np.log((1-eps_best)/eps_best)
 
                 
     #################################################### 
