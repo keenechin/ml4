@@ -4,3 +4,4 @@ train_adaboost.csv
 mnist_all.mat
 __pycache__/
 *.tar
+.vscode/

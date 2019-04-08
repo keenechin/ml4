@@ -27,11 +27,14 @@ sigma = np.concatenate((s1,s1),axis=0)
 
 data = np.vstack((X,y)).T
 mll = compute_log_likelihood(data)
-print('mean log-likehood: {}'.format(mll)) # Print the mean log-likelihood
-mu10,sigma10,w10 = gmm(data,mu,sigma,w,10)
-print(mu10) # Print mu at iteration 10
-print(sigma10) # Print sigma at iteration 10
-print(w10) # Print w at iteration 10
+print('initial mean log-likelihood =  {}'.format(mll)) # Print the mean log-likelihood
+mu10,sigma10,w10,iters10,mll10 = gmm(data,mu,sigma,w,10)
+print('\nConverges after {} steps'.format(iters10))
+print('\nAt iteration 10:')
+print('mean log-likelihood = {}'.format(mll10))
+print('mu = \n{}'.format(mu10)) # Print mu at iteration 10
+print('sigma = \n{}'.format(sigma10)) # Print sigma at iteration 10
+print('w = \n{}'.format(w10)) # Print w at iteration 10
 
 
 

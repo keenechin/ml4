@@ -64,7 +64,7 @@ def prepare_data_pca():
 
 
 
-def gmm(X,mu,sigma,w,iteration=100):
+def gmm(X,mu,sigma,w,iteration=100,stopping_condition=""):
     '''
     This function trains GMM using EM algorithm.
     
@@ -87,15 +87,17 @@ def gmm(X,mu,sigma,w,iteration=100):
     #######################################################################
 
     last_mll = 0
-
+    convergence_steps = iteration
     for i in range(iteration):
         mll,Ls = expectation_step(X,mu,sigma,w)
-        mu,sigma,w = maximization_step(X,Ls)
         if np.abs(mll-last_mll) < 1e-5:
-            break
+            convergence_steps = np.min([i,convergence_steps])
+            if stopping_condition == 'convergence':
+                break
+        mu,sigma,w = maximization_step(X,Ls)
         last_mll = mll
 
-    return mu,sigma,w,i,mll
+    return mu,sigma,w,convergence_steps,mll
 
     #######################################################################
     
@@ -132,13 +134,12 @@ def expectation_step(X,mu,sigma,w):
     for j in range(k):
         likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j,:], cov = sigma[j,:,:])
     
-    ll = np.log(np.sum(likelihood,axis = 1))
+    l_sum = np.sum(likelihood,axis = 1)
+    ll = np.log(l_sum)
     mll = 1/N * np.sum(ll)
+    Ls = (likelihood.T/l_sum).T
 
-
-
-
-    return mll,likelihood
+    return mll, Ls
     
     #######################################################################
 
@@ -163,12 +164,20 @@ def maximization_step(X,Ls):
     # YOUR CODE HERE:
     #######################################################################
     #SHAPES ARE WRONG
-    mu_num = np.sum(Ls*X,axis=0)
+    k = Ls.shape[1]
+    N,p = X.shape
     den = np.sum(Ls,axis=0) 
-    mu = mu_num/den
-    sig_num = Ls*np.power((X-mu),2)
-    sigma = sig_num/den
-    w = np.sum(Ls,axis=0)/len(Ls)
+    mu = np.nan*np.ones((k,p))
+    w = np.nan*np.ones((k,1)) 
+    sigma = np.nan*np.ones((k,p,p))
+    
+    for j in range(k):
+        gamma_nk = np.vstack((Ls[:,j],Ls[:,j])).T
+        mu_num = np.sum(gamma_nk*X,axis=0)
+        mu[j,:] = mu_num/den[j]
+        sig_num = ((gamma_nk*(X-mu[j,:])).T@(X-mu[j,:]))
+        sigma[j,:,:] = sig_num/den[j]
+        w[j,:] = np.sum(Ls[:,j],axis=0)/len(Ls)
     return mu,sigma,w
 
     #######################################################################
