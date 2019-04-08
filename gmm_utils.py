@@ -86,8 +86,16 @@ def gmm(X,mu,sigma,w,iteration=100):
     # YOUR CODE HERE:
     #######################################################################
 
+    last_mll = 0
 
-    return None
+    for i in range(iteration):
+        mll,Ls = expectation_step(X,mu,sigma,w)
+        mu,sigma,w = maximization_step(X,Ls)
+        if np.abs(mll-last_mll) < 1e-5:
+            break
+        last_mll = mll
+
+    return mu,sigma,w,i,mll
 
     #######################################################################
     
@@ -130,7 +138,7 @@ def expectation_step(X,mu,sigma,w):
 
 
 
-    return mll
+    return mll,likelihood
     
     #######################################################################
 
@@ -154,9 +162,14 @@ def maximization_step(X,Ls):
     #######################################################################
     # YOUR CODE HERE:
     #######################################################################
-
-
-    return None
+    #SHAPES ARE WRONG
+    mu_num = np.sum(Ls*X,axis=0)
+    den = np.sum(Ls,axis=0) 
+    mu = mu_num/den
+    sig_num = Ls*np.power((X-mu),2)
+    sigma = sig_num/den
+    w = np.sum(Ls,axis=0)/len(Ls)
+    return mu,sigma,w
 
     #######################################################################
 
@@ -213,7 +226,7 @@ def compute_log_likelihood(X):
     mu = np.array([[-3,0],[5,0]])
     s1 = np.array([[1,0],[0,1]]).reshape(1,2,2)
     sigma = np.concatenate((s1,s1),axis=0)
-    mll = expectation_step(X,mu,sigma,w)
+    mll,Ls = expectation_step(X,mu,sigma,w)
     return mll
 
 
