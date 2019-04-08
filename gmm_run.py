@@ -80,5 +80,20 @@ for k in range(1,6):
 # YOUR CODE HERE:
 
 plt.figure()
+mlls = []
+for k in range(1,11):
+        mll_k = []
+        for i in range(10):
+                mu,sigma,w = rnd_init(X,k)
+                mu,sigma,w,iters,mll_list = gmm(X,mu,sigma,w,stopping_condition="convergence")
+                mll_k.append(mll_list[-1])  
+        mean_mll = np.mean(np.array(mll_k))
+        mlls.append(mean_mll)
+plt.plot(mlls)
+plt.xlabel('Number of Gaussian Components k')
+plt.ylabel('Mean log-likelihood')
+plt.show()
 
 
+
+#%%
