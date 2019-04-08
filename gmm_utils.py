@@ -85,7 +85,7 @@ def gmm(X,mu,sigma,w,iteration=100,stopping_condition=""):
     #######################################################################
     # YOUR CODE HERE:
     #######################################################################
-
+    mll_list = []
     last_mll = 0
     convergence_steps = iteration
     for i in range(iteration):
@@ -95,9 +95,10 @@ def gmm(X,mu,sigma,w,iteration=100,stopping_condition=""):
             if stopping_condition == 'convergence':
                 break
         mu,sigma,w = maximization_step(X,Ls)
+        mll_list.append(mll)
         last_mll = mll
 
-    return mu,sigma,w,convergence_steps,mll
+    return mu,sigma,w,convergence_steps,mll_list
 
     #######################################################################
     
@@ -126,13 +127,14 @@ def expectation_step(X,mu,sigma,w):
     # YOUR CODE HERE:
     ############
     ###########################################################
-    N,k = X.shape
-    likelihood = np.zeros(X.shape)
+    N,p = X.shape
+    k = len(w)
+    likelihood = np.zeros((N,k))
     
 
     #maybe each row of likelhood should sum to 1
     for j in range(k):
-        likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j,:], cov = sigma[j,:,:])
+        likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j,:], cov = sigma[j])
     
     l_sum = np.sum(likelihood,axis = 1)
     ll = np.log(l_sum)
