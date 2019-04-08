@@ -114,10 +114,23 @@ def expectation_step(X,mu,sigma,w):
     
     #######################################################################
     # YOUR CODE HERE:
-    #######################################################################
+    ############
+    ###########################################################
+    N,k = X.shape
+    likelihood = np.zeros(X.shape)
+    
+
+    #maybe each row of likelhood should sum to 1
+    for j in range(k):
+        likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j,:], cov = sigma[j,:,:])
+    
+    ll = np.log(np.sum(likelihood,axis = 1))
+    mll = 1/N * np.sum(ll)
 
 
-    return None
+
+
+    return mll
     
     #######################################################################
 
@@ -141,6 +154,7 @@ def maximization_step(X,Ls):
     #######################################################################
     # YOUR CODE HERE:
     #######################################################################
+
 
     return None
 
@@ -194,8 +208,13 @@ def plot_ellipse(mu,sigma):
   
     return
 
-def compute_log_likelihood():
-    return None
+def compute_log_likelihood(X):
+    w = np.array([0.5,0.5]).T
+    mu = np.array([[-3,0],[5,0]])
+    s1 = np.array([[1,0],[0,1]]).reshape(1,2,2)
+    sigma = np.concatenate((s1,s1),axis=0)
+    mll = expectation_step(X,mu,sigma,w)
+    return mll
 
 
 

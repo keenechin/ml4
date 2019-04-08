@@ -20,8 +20,8 @@ X,y=prepare_data_pca()
 ####################################################
 
 # YOUR CODE HERE:
-
-print() # Print the mean log-likelihood
+mll = compute_log_likelihood(np.vstack((X,y)).T)
+print('mean log-likehood: {}'.format(mll)) # Print the mean log-likelihood
 print() # Print mu at iteration 10
 print() # Print sigma at iteration 10
 print() # Print w at iteration 10
