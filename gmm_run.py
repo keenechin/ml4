@@ -14,7 +14,13 @@ import seaborn as sns
 ####################################################
 
 X,y=prepare_data_pca()
-
+plt.figure()
+sns.scatterplot(X[:,0],X[:,1],hue = np.squeeze(y))
+plt.show()
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.savefig('q4p1.png')
+ 
 
 
 ####################################################
