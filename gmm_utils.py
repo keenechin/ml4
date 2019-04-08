@@ -37,14 +37,16 @@ def prepare_data_pca():
     # (raw input data divided by 255) and the corresponding labels y 
     # (0 for test0, 1 for test1).
     #######################################################################
-
-
+    test0 = mat['test0']/255
+    test1 = mat['test1']/255
+    X0 = np.vstack((test0,test1))
+    
     #######################################################################
 
     # Compute PCA:
     # Read: http://tiny.cc/y2m13y
     
-    pca = PCA()
+    pca = PCA(n_components=2)
     pca.fit(X0)    
     score = pca.transform(X0)
     
@@ -52,10 +54,11 @@ def prepare_data_pca():
     # YOUR CODE HERE:
     # Plot the first 2 PCs (you can use sns.scatterplot) and return them 
     #######################################################################
-
-
+    X = score[:,0]
+    y = score[:,1]
+    sns.scatterplot(X,y)
+    plt.show()
     #######################################################################
-
     return X, y
     
 
@@ -189,7 +192,10 @@ def plot_ellipse(mu,sigma):
         x = np.expand_dims(np.transpose(mu[i,:]),1) + 2.5 * np.dot(A, np.array([np.cos(theta), np.sin(theta)]))
         plt.plot(x[0,:], x[1,:])
   
-    return 
+    return
+
+def compute_log_likelihood():
+    return None
 
 
 
