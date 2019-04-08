@@ -54,9 +54,9 @@ def prepare_data_pca():
     # YOUR CODE HERE:
     # Plot the first 2 PCs (you can use sns.scatterplot) and return them 
     #######################################################################
-    X = score[:,0]
-    y = score[:,1]
-    sns.scatterplot(X,y)
+    X = np.vstack((score[:,0],score[:,1])).T
+    y = np.hstack((np.zeros(test0.shape[0]),np.ones(test1.shape[0]))).T
+    sns.scatterplot(X[:,0],X[:,1],hue = np.squeeze(y))
     plt.show()
     #######################################################################
     return X, y
@@ -134,7 +134,7 @@ def expectation_step(X,mu,sigma,w):
 
     #maybe each row of likelhood should sum to 1
     for j in range(k):
-        likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j,:], cov = sigma[j])
+        likelihood[:,j] = w[j]*multivariate_normal.pdf(X,mean = mu[j], cov = sigma[j])
     
     l_sum = np.sum(likelihood,axis = 1)
     ll = np.log(l_sum)
