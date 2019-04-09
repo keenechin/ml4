@@ -98,9 +98,10 @@ for k in range(1,11):
                 mll_k.append(mll_list[-1])  
         mean_mll = np.mean(np.array(mll_k))
         mlls.append(mean_mll)
-plt.plot(mlls)
+plt.plot(np.arange(1,11),mlls)
 plt.xlabel('Number of Gaussian Components k')
 plt.ylabel('Mean log-likelihood')
+plt.title('Effect of increasing mixture ')
 plt.savefig('q4p6.png')
 plt.show()
 
