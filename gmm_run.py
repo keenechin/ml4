@@ -14,13 +14,12 @@ import seaborn as sns
 ####################################################
 
 X,y=prepare_data_pca()
-plt.figure()
-sns.scatterplot(X[:,0],X[:,1],hue = np.squeeze(y))
-plt.show()
 plt.xlabel('PC1')
 plt.ylabel('PC2')
+plt.title('Principal components of gaussians')
+sns.scatterplot(X[:,0],X[:,1],hue = np.squeeze(y))
 plt.savefig('q4p1.png')
- 
+plt.show()
 
 
 ####################################################
@@ -58,6 +57,7 @@ for i in range(10):
 plt.xlabel('iters')
 plt.ylabel('mean log-likelihood')
 plt.title('Different random initializations')
+plt.savefig('q4p4.png')
 plt.show()
 
 
@@ -74,6 +74,9 @@ for k in range(1,6):
     plot_ellipse(mu,sigma)
     sns.scatterplot(X[:,0],X[:,1],hue=np.squeeze(y))
     plt.title('GMM solution with k = {}'.format(k))
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
+    plt.savefig('q4p5_k{}.png'.format(k))
     plt.show()
  
     
@@ -98,6 +101,7 @@ for k in range(1,11):
 plt.plot(mlls)
 plt.xlabel('Number of Gaussian Components k')
 plt.ylabel('Mean log-likelihood')
+plt.savefig('q4p6.png')
 plt.show()
 
 

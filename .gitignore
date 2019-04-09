@@ -5,4 +5,4 @@ mnist_all.mat
 __pycache__/
 *.tar
 .vscode/
-q4p1.png
+*.png
